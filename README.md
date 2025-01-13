@@ -1,2 +1,9 @@
-# python-study
-Python study in MAGO
+# Python study with MAGO
+
+## Python Basic
+
+## Architecture
+
+## Data Type
+
+## Class
