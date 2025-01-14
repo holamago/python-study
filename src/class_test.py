@@ -7,6 +7,8 @@
 
 import argparse
 from typing import List
+from time import sleep
+from utils.decorators import decoding_decorator
 
 
 class ClassTest:
@@ -24,6 +26,12 @@ class ClassTest:
 
     def __str__(self):
         return str(self.data)
+
+    @decoding_decorator
+    def check_decorator(self):
+        print ("---- Start sleeping ----")
+        sleep(5)
+        return {}
 
 
 
@@ -46,16 +54,21 @@ def main():
     # Print the class information with `__str__`
     print (app)
 
-    # Print the length of the list
-    print(len(app))
+    # # Print the length of the list
+    # print(len(app))
 
-    # Print the list with `__getitem__`
-    for i in range(len(app)):
-        print(app[i])
+    # # Print the list with `__getitem__`
+    # for i in range(len(app)):
+    #     print(app[i])
 
-    # Add two classes
-    app2 = ClassTest(100)
-    print(app + app2)
+    # # Add two classes
+    # app2 = ClassTest(100)
+    # print(app + app2)
+
+    # # Test decoding_decorator
+    # result = app.check_decorator()
+    # print(result)
+
 
 
 

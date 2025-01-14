@@ -32,6 +32,10 @@ class ClassTest(ClassTestConfig):
         return str(f"Your class name is: {self.name} and data is {self.data}")
 
 
+    def tuple_test(self):
+        return len(self.data), self.data
+
+
 def main():
     parser = argparse.ArgumentParser(description='Class Test')
 
@@ -64,6 +68,11 @@ def main():
     # Add two classes
     app2 = ClassTest(100)
     print(app + app2)
+
+    # Test tuple
+    size, data = app.tuple_test()
+    print(f"Number of data: {size}")
+    print(f"Data: {data}")
 
 
 
