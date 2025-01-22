@@ -4,6 +4,7 @@
 # AUTHORS:
 # Sukbong Kwon (Galois)
 
+import time
 
 # Define decorator to estimate the elapsed time
 def decoding_decorator(func):

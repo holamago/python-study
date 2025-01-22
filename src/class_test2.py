@@ -4,10 +4,11 @@
 # AUTHORS:
 # Sukbong Kwon (Galois)
 
-
 import argparse
 from typing import List, Text
+from pathlib import Path
 from pydantic import BaseModel
+from time import sleep
 
 class ClassTestConfig(BaseModel):
     name: Text = 'Class Test'
@@ -15,7 +16,7 @@ class ClassTestConfig(BaseModel):
 
 
 class ClassTest(ClassTestConfig):
-    def __init__(self, number: int):
+    def __init__(self, number: int, digit: int = 10):
         super().__init__()
         self.data = [i for i in range(number)]
 
@@ -31,6 +32,18 @@ class ClassTest(ClassTestConfig):
     def __str__(self):
         return str(f"Your class name is: {self.name} and data is {self.data}")
 
+    def make_dir(self, path: Path):
+        if not path.exists():
+            path.mkdir(parents=True, exist_ok=True)
+
+    def make_file(self, path: Text, data: Text):
+        Path(path).write_text(data)
+
+        # I want to delete the file after 5 seconds
+        sleep(5)
+        Path(path).unlink()
+        Path('test').rmdir()
+
 
     def tuple_test(self):
         return len(self.data), self.data
@@ -44,13 +57,16 @@ def main():
         '--number',
         type=int,
         required=True,
-        help='Number of test'
+        help='Number of test',
     )
 
     args = parser.parse_args()
 
     # Create a class instance & make a list with the given number
-    app = ClassTest(args.number)
+    app = ClassTest(
+        digit=10,
+        number=args.number,
+    )
 
     # Print the name in the class
     print ("Your class name is: ", app.name)
@@ -70,10 +86,14 @@ def main():
     print(app + app2)
 
     # Test tuple
-    size, data = app.tuple_test()
+    size, _ = app.tuple_test()
     print(f"Number of data: {size}")
-    print(f"Data: {data}")
 
+    # Test make_dir
+    app.make_dir(Path('test'))
+
+    # Test make_file
+    app.make_file('test/a.txt', 'Hello World')
 
 
 if __name__ == '__main__':

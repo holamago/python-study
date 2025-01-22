@@ -19,6 +19,7 @@ else
     curl https://bootstrap.pypa.io/get-pip.py | python
     deactivate
     cd ${CUR_DIR}
+
 fi
 
 source ~/pyenv/${venv}/bin/activate
