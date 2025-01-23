@@ -5,34 +5,13 @@
 # Sukbong Kwon (Galois)
 
 
-"""Scoring the sentence with target words in the sentence
-
-Usage:
-    score_word [options] <sentence>
-    score_word -h | --help
-    score_word --version
-
-Common options:
-    <sentence>                  Sentence
-    -h --help                   Show this screen.
-    --version                   Show version.
-    --codebook=<str>            Codebook file for scoring
-                                [default: data/emotion_codebook.tsv]
-    --threshold=<float>         Threshold for scoring
-                                [default: 0.4]
-"""
-
+import json
 import pandas as pd
 import editdistance as ed
+import numpy as np
 from pathlib import Path
 from typing import Text, Dict, Tuple
 from pydantic import BaseModel
-
-# Saturn
-from saturn.utils.set_logging import get_logger
-
-# Define
-logger = get_logger(__name__.split('.')[-1])
 
 
 class ScoringConfig(BaseModel):
@@ -124,6 +103,25 @@ class Scoring(ScoringConfig):
 
         return best_word, (1.0 - best_distance), best_score
 
+    def get_statistics(
+        self,
+    )-> Dict
+        """Get the statistics of the codebook
+
+        Returns
+        -------
+        Dict
+            Statistics of the codebook
+        """
+        statistics = {
+            "mean": np.mean(list(self.data.values())),
+            "std": np.std(list(self.data.values())),
+            "min": np.min(list(self.data.values())),
+            "max": np.max(list(self.data.values())),
+        }
+
+        return statistics
+
 
 def main():
     import argparse
@@ -137,13 +135,15 @@ def main():
     )
 
     parser.add_argument(
+        '-c',
         '--codebook',
         type=str,
-        default='conf/emotion_codebook.tsv',
+        default='data/emotion_codebook.tsv',
         help='Codebook file for scoring',
     )
 
     parser.add_argument(
+        '-th',
         '--threshold',
         type=float,
         default=0.4,
@@ -159,8 +159,11 @@ def main():
     result = app(
         sentence=args.sentence,
     )
-
     print(result)
+
+    statistics = app.get_statistics()
+    print (statistics)
+    print(json.dump(statistics, open("data/statistics.json", "w")))
 
 
 
