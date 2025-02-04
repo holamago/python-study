@@ -32,6 +32,7 @@ class Scoring(ScoringConfig):
         # Load codebook
         df = pd.read_csv(codebook, sep='\t')
         self.data = df.set_index("word")["score"].to_dict()
+        print ("==== Codebook loaded ====")
 
     def __call__(
         self,
@@ -105,7 +106,7 @@ class Scoring(ScoringConfig):
 
     def get_statistics(
         self,
-    )-> Dict
+    )-> Dict:
         """Get the statistics of the codebook
 
         Returns
@@ -113,6 +114,7 @@ class Scoring(ScoringConfig):
         Dict
             Statistics of the codebook
         """
+        mean = sum(self.data.values()) / len(self.data.values())
         statistics = {
             "mean": np.mean(list(self.data.values())),
             "std": np.std(list(self.data.values())),
